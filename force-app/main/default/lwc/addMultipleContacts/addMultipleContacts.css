@@ -5,10 +5,11 @@
 }
 
 .table-container{
-    overflow-x: auto;
-    overflow-y: auto;
-    width: 100%;
+    overflow: auto;
+    width: 800px; 
+    min-width: 300px;
     height: 240px;
+
 }
 
 .table-container th{
@@ -16,4 +17,9 @@
     top: 0;
     background: rgb(228, 228, 228);
     z-index: 1;
+}
+
+.table-container lightning-input{
+    width: 180px;
+    min-width: 60px;
 }

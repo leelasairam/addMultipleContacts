@@ -1,9 +1,10 @@
 import { LightningElement,api,track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
+
 export default class AddMultipleContacts extends LightningElement {
     @api recordId;
-    @track rows = [1];
+    @track rows = [{RowId:1,FirstName:'',LastName:'',Email:'',Phone:''}];
     CountId = 1;
 
     showToast(title,msg,varient) {
@@ -19,8 +20,8 @@ export default class AddMultipleContacts extends LightningElement {
     addRow(){
         console.log('clicked...')
         this.CountId += 1;
-        console.log(this.CountId);
-        this.rows.push(this.CountId);
+        console.log({RowId:this.CountId,FirstName:'',LastName:'',Email:'',Phone:''});
+        this.rows.push({RowId:this.CountId,FirstName:'',LastName:'',Email:'',Phone:''});
     }
 
     handleSave(){
@@ -51,7 +52,7 @@ export default class AddMultipleContacts extends LightningElement {
         }
         const rowId = event.target.dataset.rowid;
         console.log(rowId);
-        this.rows = this.rows.filter(i=>i!=rowId);
+        this.rows = this.rows.filter(i=>i.RowId!=rowId);
     }
 
     validateContacts(rows){
@@ -84,5 +85,16 @@ export default class AddMultipleContacts extends LightningElement {
             })
         })
         return isValid;
+    }
+
+    cloneRow(event){
+        const clickedRow = event.target.closest('tr');
+        const inputs = clickedRow.querySelectorAll('lightning-input');
+        const contact = {};
+        inputs.forEach(inp=>{
+            contact[inp.name] = inp.value;
+        })
+        this.CountId += 1;
+        this.rows.push({RowId:this.CountId,FirstName:contact.FirstName || '',LastName:contact.LastName || '',Email:contact.Email || '',Phone:contact.Phone || ''});
     }
 }
