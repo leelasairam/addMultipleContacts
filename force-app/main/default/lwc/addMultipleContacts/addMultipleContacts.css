@@ -1,0 +1,19 @@
+.table-container th,.table-container td{
+    border: 1px solid #9b9b9b;
+    text-align: left;
+    padding: 8px;
+}
+
+.table-container{
+    overflow-x: auto;
+    overflow-y: auto;
+    width: 100%;
+    height: 240px;
+}
+
+.table-container th{
+    position: sticky;
+    top: 0;
+    background: rgb(228, 228, 228);
+    z-index: 1;
+}

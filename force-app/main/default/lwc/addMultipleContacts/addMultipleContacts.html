@@ -1,0 +1,43 @@
+<template>
+    <lightning-card>
+        <p slot="title"><lightning-icon icon-name="action:add_contact" size="small"></lightning-icon> &nbsp; Add Contacts</p>
+        <lightning-button icon-name="utility:add" label="Add" onclick={addRow} slot="actions"></lightning-button>
+        <!--body-->
+        <div class="slds-p-horizontal_small table-container">
+            <table lwc:ref="contactForm">
+                <tbody>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Delete ?</th>
+                    </tr>
+                    <template for:each={rows} for:item="i">
+                        <tr key={i} class="contact-row">
+                            <td>
+                                <lightning-input variant="label-hidden" name="FirstName" required></lightning-input>
+                            </td>
+                            <td>
+                                <lightning-input variant="label-hidden" name="LastName" required></lightning-input>
+                            </td>
+                            <td>
+                                <lightning-input variant="label-hidden" name="Email" type="email" required></lightning-input>
+                            </td>
+                            <td>
+                                <lightning-input variant="label-hidden" name="Phone" type="tel"></lightning-input>
+                            </td>
+                            <td>
+                                <lightning-button-icon icon-name="utility:delete" onclick={removeRow} data-rowid={i}></lightning-button-icon>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+        <!--footer-->
+        <div slot="footer">
+            <lightning-button icon-name="utility:save" label="Save" onclick={handleSave} variant="brand"></lightning-button>
+        </div>
+    </lightning-card>
+</template>
