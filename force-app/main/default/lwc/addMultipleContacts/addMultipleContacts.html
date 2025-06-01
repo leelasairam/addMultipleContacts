@@ -1,7 +1,17 @@
 <template>
     <lightning-card>
         <p slot="title"><lightning-icon icon-name="action:add_contact" size="small"></lightning-icon> &nbsp; Add Contacts</p>
-        <lightning-button icon-name="utility:add" label="Add" onclick={addRow} slot="actions"></lightning-button>
+        <!--actions-->
+        <div slot="actions">
+            <lightning-layout>
+                <lightning-layout-item padding="around-small">
+                    <lightning-input type="file" variant="label-hidden" onchange={handleFileUpload} accept=".csv, .xlsx"></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small">
+                    <lightning-button icon-name="utility:add" label="Add" onclick={addRow}></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
         <!--body-->
         <div class="slds-p-horizontal_small table-container">
             <table lwc:ref="contactForm">
@@ -45,6 +55,12 @@
         <!--footer-->
         <div slot="footer">
             <lightning-button icon-name="utility:save" label="Save" onclick={handleSave} variant="brand"></lightning-button>
+            <lightning-button class="reset-rows-btn" icon-name="utility:refresh" label="Reset" onclick={resetRows} variant="destructive-text"></lightning-button>
         </div>
     </lightning-card>
+
+    <!--spinner-->
+    <div if:true={loading} class="slds-is-relative">
+        <lightning-spinner class="slds-is-fixed" alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+    </div>
 </template>

@@ -6,6 +6,8 @@ export default class AddMultipleContacts extends LightningElement {
     @api recordId;
     @track rows = [{RowId:1,FirstName:'',LastName:'',Email:'',Phone:''}];
     CountId = 1;
+    @track parsedData = [];
+    loading = false;
 
     showToast(title,msg,varient) {
         const event = new ShowToastEvent({
@@ -96,5 +98,48 @@ export default class AddMultipleContacts extends LightningElement {
         })
         this.CountId += 1;
         this.rows.push({RowId:this.CountId,FirstName:contact.FirstName || '',LastName:contact.LastName || '',Email:contact.Email || '',Phone:contact.Phone || ''});
+    }
+
+    handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            const text = reader.result;
+            this.parsedData = this.parseCSV(text);
+            console.log('Parsed Object Array:', this.parsedData);
+            if(this.parsedData){
+                this.loading = false;
+                if(JSON.stringify(Object.keys(this.parsedData[0])) !== JSON.stringify(['FirstName','LastName','Email','Phone'])){
+                    this.showToast('Invalid csv template. Please use below column order.','FirstName | LastName | Email | Phone','error');
+                    return;
+                }
+                this.parsedData = this.parsedData.map(i=>({...i,RowId:++this.CountId}))
+                this.rows = [...this.rows,...this.parsedData];
+
+            }
+        };
+        this.loading = true;
+        reader.readAsText(file);
+    }
+
+    parseCSV(csv) {
+        const lines = csv.trim().split('\n');
+        const headers = lines[0].split(',').map(h => h.trim());
+
+        return lines.slice(1).map(line => {
+            const values = line.split(',').map(v => v.trim()); //['mark','test@test.com']
+            const obj = {};
+            headers.forEach((header, index) => {
+                obj[header] = values[index];
+            });
+            return obj;
+        });
+    }
+
+    resetRows(){
+        this.CountId = 1;
+        this.rows = [{RowId:1,FirstName:'',LastName:'',Email:'',Phone:''}];
     }
 }
