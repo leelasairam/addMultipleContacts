@@ -1,6 +1,6 @@
 import { LightningElement,api,track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-
+import LightningConfirm from 'lightning/confirm';
 
 export default class AddMultipleContacts extends LightningElement {
     @api recordId;
@@ -8,6 +8,10 @@ export default class AddMultipleContacts extends LightningElement {
     CountId = 1;
     @track parsedData = [];
     loading = false;
+
+    get rowsCount(){
+        return this.rows.length;
+    }
 
     showToast(title,msg,varient) {
         const event = new ShowToastEvent({
@@ -26,7 +30,7 @@ export default class AddMultipleContacts extends LightningElement {
         this.rows.push({RowId:this.CountId,FirstName:'',LastName:'',Email:'',Phone:''});
     }
 
-    handleSave(){
+    async handleSave(){
         const contacts = [];
         const container = this.refs.contactForm;
         const rows = container.querySelectorAll('.contact-row');
@@ -45,6 +49,15 @@ export default class AddMultipleContacts extends LightningElement {
             contacts.push(contact);
         })
         console.log(contacts);
+        const result = await LightningConfirm.open({
+            message: `Please click 'Ok' to proceed with creation of ${this.rowsCount} contacts.`,
+            variant: 'info',
+            label: 'Confirm',
+        });
+        if(result){
+            this.showToast('Success','Contacts created successfully','success');
+            this.resetRows();
+        }
     }
 
     removeRow(event){

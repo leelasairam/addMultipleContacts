@@ -5,6 +5,9 @@
         <div slot="actions">
             <lightning-layout>
                 <lightning-layout-item padding="around-small">
+                    <lightning-badge label={rowsCount} icon-name="utility:summary"></lightning-badge>
+                </lightning-layout-item>
+                <lightning-layout-item padding="around-small">
                     <lightning-input type="file" variant="label-hidden" onchange={handleFileUpload} accept=".csv, .xlsx"></lightning-input>
                 </lightning-layout-item>
                 <lightning-layout-item padding="around-small">
